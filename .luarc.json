@@ -1,0 +1,8 @@
+{
+    "diagnostics.globals": [
+        "w"
+    ],
+    "diagnostics.disable": [
+        "lowercase-global"
+    ]
+}
