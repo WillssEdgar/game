@@ -1,15 +1,19 @@
-local Player = {};
+local Player    = {};
 
-Player.__index = Player;
+local Bullet    = require 'bullet'
+
+Player.__index  = Player;
+Player.fireRate = 0.2
 
 function Player:New(x, y, speed, img, desiredW, desiredH)
-	local self  = setmetatable({}, Player)
-	self.x      = x or 0
-	self.y      = y or 0
-	self.speed  = speed or 200
-	self.img    = img
-	self.scaleX = (desiredW or img:getWidth()) / img:getWidth()
-	self.scaleY = (desiredH or img:getHeight()) / img:getHeight()
+	local self              = setmetatable({}, Player)
+	self.x                  = x or 0
+	self.y                  = y or 0
+	self.speed              = speed or 200
+	self.img                = img
+	self.scaleX             = (desiredW or img:getWidth()) / img:getWidth()
+	self.scaleY             = (desiredH or img:getHeight()) / img:getHeight()
+	self._timeSinceLastShot = 0
 	return self
 end
 
@@ -24,6 +28,19 @@ function Player:update(dt)
 	local ph = self.img:getHeight() * self.scaleY
 	self.x = math.max(0, math.min(self.x, love.graphics.getWidth() - pw))
 	self.y = math.max(0, math.min(self.y, love.graphics.getHeight() - ph))
+	self._timeSinceLastShot = self._timeSinceLastShot + dt
+end
+
+function Player:shoot()
+	if self._timeSinceLastShot < self.fireRate then
+		return nil
+	end
+	self._timeSinceLastShot = 0
+
+	local w, h = self.img:getWidth() * self.scaleX, self.img:getHeight() * self.scaleY
+	local bx, by = self.x + w / 2, self.y
+
+	return Bullet:New(bx, by, 500, { x = 0, y = -1 })
 end
 
 function Player:draw()

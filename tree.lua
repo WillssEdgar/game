@@ -23,4 +23,13 @@ function Tree:draw()
 	);
 end
 
+function Tree:toTable()
+	return {
+		x = self.x,
+		y = self.y,
+		scaleX = self.scaleX,
+		scaleY = self.scaleY,
+	}
+end
+
 return Tree;
