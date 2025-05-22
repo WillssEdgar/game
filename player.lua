@@ -1,4 +1,5 @@
 local Player    = {};
+local json      = require('json')
 
 local Bullet    = require 'bullet'
 
@@ -40,7 +41,14 @@ function Player:shoot()
 	local w, h = self.img:getWidth() * self.scaleX, self.img:getHeight() * self.scaleY
 	local bx, by = self.x + w / 2, self.y
 
-	return Bullet:New(bx, by, 500, { x = 0, y = -1 })
+	mouseX, mouseY = love.mouse.getPosition();
+
+	local dx = mouseX - bx
+	local dy = mouseY - by
+	local length = math.sqrt(dx * dx + dy * dy)
+
+	local dir = { x = dx / length, y = dy / length }
+	return Bullet:New(bx, by, 500, dir)
 end
 
 function Player:draw()

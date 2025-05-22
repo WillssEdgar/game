@@ -1,5 +1,6 @@
 local Bullet = {};
 Bullet.__index = Bullet;
+local json = require('json');
 
 function Bullet:New(x, y, speed, dir)
 	local self  = setmetatable({}, Bullet)
